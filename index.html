@@ -229,15 +229,15 @@
             const message = document.getElementById('message');
             
             if (code.length !== 3) {
-                showMessage('אנא הזן קוד בן 3 ספרות', 'error');
+                showMessage('אנא הזינו קוד בן 3 ספרות', 'error');
                 return;
             }
             
             // בדיקה 1: קודים ספציפיים
-            if (validCodes[code]) {
-                showVideo(validCodes[code]);
-                return;
-            }
+           // if (validCodes[code]) {
+             //   showVideo(validCodes[code]);
+            //    return;
+          //  }
             
             // בדיקה 2: טווח קודים
             if (isValidCodeRange(code)) {
