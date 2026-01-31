@@ -263,21 +263,51 @@
             const videoPlayer = document.getElementById('videoPlayer');
             const videoFrame = document.getElementById('videoFrame');
             
-            // בדיקה אם זה YouTube או MP4
+            // בדיקה אם זה YouTube
             if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+                let embedUrl = videoUrl;
+                
+                // המרה מ-watch ל-embed אם צריך
+                if (videoUrl.includes('watch?v=')) {
+                    const videoId = videoUrl.split('watch?v=')[1].split('&')[0];
+                    embedUrl = 'https://www.youtube.com/embed/' + videoId;
+                } 
+                // המרה מ-youtu.be ל-embed
+                else if (videoUrl.includes('youtu.be/')) {
+                    const videoId = videoUrl.split('youtu.be/')[1].split('?')[0];
+                    embedUrl = 'https://www.youtube.com/embed/' + videoId;
+                }
+                
                 // הצגת YouTube באמצעות iframe
-                videoFrame.src = videoUrl;
+                videoFrame.src = embedUrl;
                 videoFrame.style.display = 'block';
                 videoPlayer.style.display = 'none';
                 
                 // אם הסרטון לא נטען, נציג קישור ישיר
                 videoFrame.onerror = function() {
-                    const directUrl = videoUrl.replace('embed/', 'watch?v=');
                     alert('הסרטון לא נטען בהטמעה. פותח בחלון חדש...');
-                    window.open(directUrl, '_blank');
+                    window.open(videoUrl, '_blank');
                 };
-            } else {
-                // הצגת MP4 באמצעות video tag
+            } 
+            // בדיקה אם זה Google Drive
+            else if (videoUrl.includes('drive.google.com')) {
+                let embedUrl = videoUrl;
+                if (videoUrl.includes('/view')) {
+                    embedUrl = videoUrl.replace('/view?usp=sharing', '/preview');
+                    embedUrl = embedUrl.replace('/view', '/preview');
+                }
+                
+                videoFrame.src = embedUrl;
+                videoFrame.style.display = 'block';
+                videoPlayer.style.display = 'none';
+                
+                // Google Drive לפעמים חוסם הטמעה
+                setTimeout(() => {
+                    showMessage('💡 אם הסרטון לא נטען, לחץ על "פתח בחלון חדש"', 'error');
+                }, 3000);
+            }
+            // MP4 או סוגי וידאו אחרים
+            else {
                 videoPlayer.src = videoUrl;
                 videoPlayer.style.display = 'block';
                 videoFrame.style.display = 'none';
@@ -286,7 +316,6 @@
             videoContainer.style.display = 'block';
             showMessage('✓ הקוד אומת בהצלחה!', 'success');
         }
-
         function resetForm() {
             document.getElementById('codeSection').style.display = 'block';
             document.getElementById('videoContainer').style.display = 'none';
