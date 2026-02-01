@@ -198,7 +198,7 @@
         // לדוגמה: כל הקודים בין 100 ל-199
         function isValidCodeRange(code) {
             const num = parseInt(code);
-             return (num%10==3 || num%10==8 || num%10==5 || num%100/10==3 || num%100/10==8 || num%100/10==5 || num/100==3 || num/100==5 || num/100==8 );
+             return ((num%10==3 || num%10==8 || num%10==5) &&( num%100/10==3 || num%100/10==8 || num%100/10==5) &&( num/100==3 || num/100==5 || num/100==8 ));
         }
 
         // מעבר אוטומטי בין תיבות
